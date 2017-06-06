@@ -23,14 +23,12 @@
     <p>Results of the November 2017 Elections</p>
 </div>
 <div class="container" style="padding: 10px;">
-  <p>Total Votes Casted:  <b><?php echo $votes;?> votes</b> Reset votes? <a href="reset.php?status=1">Click Here</a></p>            
+  <p>Total Votes Casted:  <b><?php echo $votes;?> votes</b> <!-- Reset votes? <a href="reset.php?status=1">Click Here</a> --> Want to vote? <a href="index.php">Vote Here!</a></p>            
   <table class="table table-striped">
     <thead>
       <tr>
         <th>Rank</th>
         <th>Name</th>
-        <th>Position</th>
-        <th>Partylist</th>
          <th>Votes Garnered</th>
       </tr>
     </thead>
@@ -39,9 +37,7 @@
     <?php if($res['Vote'] != 0 ){?>
      <tr>
         <td><?php echo ++$rank;?></td>
-       <td><?php echo $res['Name']?></td>
-       <td><?php echo $res['Position']?></td>
-       <td><?php echo $res['Partylist']?></td>
+       <td><?php echo $res['Fullname']?></td>
        <td><?php echo $res['Vote']?></td>
      </tr>
      <?php}else{?>

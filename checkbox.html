@@ -1,0 +1,40 @@
+<html>
+<head>
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function(){	
+		
+		$('#CheckboxContainer :checkbox').change(function () {
+			var checkedCheckBoxes = $(this).parent().find(':checkbox:checked');
+			if (checkedCheckBoxes.length > 5) {
+				this.checked = false;
+				$("#error").html("Only 5 can be checked. Please uncheck some if you want to check others... :)");
+			}
+			else {
+				$("#error").empty();
+			}
+		});
+		
+	});
+	</script>
+ 
+</head>
+<body>
+	
+	<div id="CheckboxContainer">
+		<input type="checkbox" value="Check 1"/><br />
+		<input type="checkbox" value="Check 2"/><br />
+		<input type="checkbox" value="Check 3"/><br />
+		<input type="checkbox" value="Check 4"/><br />
+		<input type="checkbox" value="Check 5"/><br />
+		<input type="checkbox" value="Check 6"/><br />
+		<input type="checkbox" value="Check 7"/><br />
+		<input type="checkbox" value="Check 8"/><br />
+		<input type="checkbox" value="Check 9"/><br />
+		<input type="checkbox" value="Check 10"/><br />
+	</div>
+	<br />
+	<div id="error"></div>
+ 
+</body>
+</html>

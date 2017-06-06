@@ -3,7 +3,7 @@
 function db(){
 		
 		try {
-		     return new PDO("mysql:host=localhost;dbname=election","root","");
+		     return new PDO("mysql:host=localhost;dbname=kkelection","root","");
 		    echo "Connected Successfully";
 		  }
 		catch(PDOException $e)
@@ -11,35 +11,19 @@ function db(){
 		    echo "Connection failed: " . $e->getMessage();
 		    }
 }
-function partylist(){
 
-		$sql = "SELECT * FROM partylist";
-		$db = db();
-		$st = $db->prepare($sql);
-		$st->execute();
-		$grp = $st->fetchAll(); //returns and array of arrays
-		return $grp;
-}
-function position(){
-
-		$sql = "SELECT * FROM position";
-		$db = db();
-		$st = $db->prepare($sql);
-		$st->execute();
-		$grp = $st->fetchAll(); //returns and array of arrays
-		return $grp;
-}
-function addCandidate($fname, $lname, $bday, $email, $address, $posid, $partyid){
+function addCandidate($fname, $mname, $lname){
 
 		$db = db();
-		$sql = "INSERT into candidates (fname, lname, email, bday, address, pos_id, party_id) VALUES (?,?,?,?,?,?,?)";
+		$sql = "INSERT into candidates (fname, mname, lname) VALUES (?,?,?)";
 		$st = $db->prepare($sql);
-		$st->execute(array($fname, $lname, $email, $bday, $address, $posid, $partyid));	
+		$st->execute(array($fname, $mname, $lname));	
 		$db = null;
 }
 function candidates(){
 
-		$sql = "SELECT * FROM candidates";
+		$sql = "SELECT ca.cand_id as ID, concat(ca.fname, ' ', ca.mname, ' ', ca.lname) as Fullname FROM candidates ca INNER JOIN votetable v ON ca.cand_id = v.cand_id
+			ORDER BY rand()";
 		$db = db();
 		$st = $db->prepare($sql);
 		$st->execute();
@@ -55,34 +39,22 @@ function candidate(){
 		$grp = $st->fetchAll(); //returns and array of arrays
 		return $grp;
 }
-function findParty($partyid){
-	$db = db();
-	$sql = "SELECT partylist_name from partylist where  party_id = '$partyid' ";
-	$q = $db->query($sql);
-	return $m = $q->fetchColumn();
-}
-function findPosition($posid){
-	$db = db();
-	$sql = "SELECT pos_name from position where  pos_id = '$posid' ";
-	$q = $db->query($sql);
-	return $m = $q->fetchColumn();
-}
 function findCandidate($candid){
 	$db = db();
-	$sql = "SELECT concat(fname, ' ', lname) AS Name  from candidates where  cand_id = '$candid' ";
+	$sql = "SELECT concat(ca.fname, ' ', ca.mname, ' ', ca.lname) AS Name  from candidates ca where  cand_id = '$candid' ";
 	$q = $db->query($sql);
 	return $m = $q->fetchColumn();
 }
-function insertVote($candid, $posid, $partyid, $vote){
+function insertVote($candid, $vote){
 		$db = db();
-		$sql = "INSERT into votetable (pos_id, cand_id, party_id, votes) VALUES (?,?,?,?)";
+		$sql = "INSERT into votetable (cand_id, votes) VALUES (?,?)";
 		$st = $db->prepare($sql);
-		$st->execute(array($posid, $candid, $partyid, $vote));
+		$st->execute(array($candid, $vote));
 		$db = null;	
 }
 function deleteCandidate($candid){
 
-	$sql = "DELETE FROM votetable WHERE candid = ?";
+	$sql = "DELETE FROM votetable WHERE cand_id = ?";
 	$db = db();
 	$st = $db->prepare($sql);
 	$st->execute(array($candid));
@@ -107,13 +79,10 @@ function vote($candid){
 }
 function rankvotes(){
 
-		$sql = "SELECT concat(ca.fname,' ', ca.lname) as Name, pos.pos_name as Position, pt.partylist_name as Partylist, v.votes as Vote 
-				FROM votetable v
-				LEFT JOIN position pos ON v.pos_id = pos.pos_id
-				LEFT JOIN candidates ca ON v.cand_id = ca.cand_id
-				LEFT JOIN partylist pt ON v.party_id = pt.party_id
-				ORDER BY v.votes DESC
-				LIMIT 9
+		$sql = " SELECT concat(ca.fname, ' ', ca.mname, ' ', ca.lname) as Fullname, v.votes as Vote
+				 FROM candidates ca LEFT JOIN votetable v ON ca.cand_id = v.cand_id
+				 ORDER BY v.votes DESC
+				 LIMIT 13 
 				";
 		$db = db();
 		$st = $db->prepare($sql);
@@ -136,6 +105,25 @@ function sumvotes(){
 		$db = db();
 		$st = $db->prepare($sql);
 		$st->execute();
+		$grp = $st->fetchColumn(); //returns and array of arrays
+		return $grp;
+}
+function get_total_all_records(){
+
+		$sql = "SELECT SUM(*) FROM candidates";
+		$db = db();
+		$st = $db->prepare($sql);
+		$st->execute();
+		$grp = $st->fetchColumn(); //returns and array of arrays
+		return $grp;
+
+}
+function ifnameexist($fullname){
+
+		$sql = "SELECT count(concat(fname,' ', mname, ' ', lname)) as exist FROM candidates WHERE concat(fname,' ', mname, ' ', lname) = ?";
+		$db = db();
+		$st = $db->prepare($sql);
+		$st->execute(array($fullname));
 		$grp = $st->fetchColumn(); //returns and array of arrays
 		return $grp;
 }
