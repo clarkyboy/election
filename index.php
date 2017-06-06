@@ -1,10 +1,13 @@
 <?php
+	$page = $_SERVER['PHP_SELF'];
+    $sec = "3600";
 	include('db.php');
 	$candidates = candidates();
 ?>
 <html>
 	<head>
 		<title>Election Roster</title>
+		<meta http-equiv="refresh" content="<?php echo $sec?>;URL='<?php echo $page?>'">
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
 		<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
@@ -54,7 +57,6 @@
 							<th width="35%">Middle Name</th>
 							<th width="35%">Last Name</th>
 							<th width="10%">Edit</th>
-							<th width="10%">Delete</th>
 							<th width="10%">Vote Table</th>
 						</tr>
 					</thead>
@@ -104,10 +106,10 @@
 				          <h4 class="modal-title">Check only 13 candidates</h4>
 				        </div>
 				        <div class="modal-body">
-				          <div class="multiselect">
+				          <div class="multiselect form-control">
 				          <form  method="POST" action="vote.php">
 				          <?php foreach($candidates as $can) {?>
-				           <input type="checkbox" name="candidates[]"  value="<?php echo $can['ID'];?>" onchange="checkboxes()">
+				           <input type="checkbox" id="check" name="candidates[]" value="<?php echo $can['ID'];?>" onchange="checkboxes()">
 				           <?php echo $can['Fullname'].'<br />';?>
 				           <?php }?> 
 				          </div>

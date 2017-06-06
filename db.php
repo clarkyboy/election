@@ -82,7 +82,7 @@ function rankvotes(){
 		$sql = " SELECT concat(ca.fname, ' ', ca.mname, ' ', ca.lname) as Fullname, v.votes as Vote
 				 FROM candidates ca LEFT JOIN votetable v ON ca.cand_id = v.cand_id
 				 ORDER BY v.votes DESC
-				 LIMIT 13 
+				 LIMIT 13
 				";
 		$db = db();
 		$st = $db->prepare($sql);

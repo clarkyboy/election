@@ -33,9 +33,8 @@ foreach($result as $row)
 	$sub_array[] = $row["fname"];
 	$sub_array[] = $row["mname"];
 	$sub_array[] = $row["lname"];
-	$sub_array[] = '<button type="button" name="update" id="'.$row["cand_id"].'" class="btn btn-warning btn-xs update">Update</button>';
-	$sub_array[] = '<button type="button" name="delete" id="'.$row["cand_id"].'" class="btn btn-danger btn-xs delete">Delete</button>';
-	$sub_array[] = '<a href = "tableinsert.php?candid='.$row["cand_id"].'" class="btn btn-warning btn-xs update">Add to Votetable</a>';
+	$sub_array[] = '<button type="button" name="update" id="'.$row["cand_id"].'" class="btn btn-primary btn-xs update">Update</button>';
+	$sub_array[] = '<a href = "tableinsert.php?candid='.$row["cand_id"].'" class="btn btn-info btn-xs vote">Add to Votetable</a>';
 	$data[] = $sub_array;
 }
 $output = array(

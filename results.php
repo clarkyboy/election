@@ -3,7 +3,7 @@
   $sec = "10";
   include('db.php');
   $results = rankvotes();
-  $votes = sumvotes();
+  $votes = sumvotes() / 13;
   $rank = 0;
 ?>
 <!DOCTYPE html>
@@ -23,7 +23,7 @@
     <p>Results of the November 2017 Elections</p>
 </div>
 <div class="container" style="padding: 10px;">
-  <p>Total Votes Casted:  <b><?php echo $votes;?> votes</b> <!-- Reset votes? <a href="reset.php?status=1">Click Here</a> --> Want to vote? <a href="index.php">Vote Here!</a></p>            
+  <p>Total Ballots entered:  <b><?php echo round($votes);?> ballots</b> Reset votes? <a href="reset.php?status=1">Click Here</a> Want to vote? <a href="index.php">Vote Here!</a></p>            
   <table class="table table-striped">
     <thead>
       <tr>
@@ -36,7 +36,7 @@
     <?php foreach($results as $res){?>
     <?php if($res['Vote'] != 0 ){?>
      <tr>
-        <td><?php echo ++$rank;?></td>
+       <td><?php echo ++$rank;?></td>
        <td><?php echo $res['Fullname']?></td>
        <td><?php echo $res['Vote']?></td>
      </tr>
